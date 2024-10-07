@@ -33,5 +33,20 @@
         "id":7,
         "title":"Eventos",
         "image":"https://i.postimg.cc/zfTWD7kn/ticket.png"
+    },
+    {
+        "id":8,
+        "title":"Libros",
+        "image":"https://i.postimg.cc/SQHdD91x/bart.jpg"
+    },
+    {
+        "id":9,
+        "title":"Juguetes",
+        "image":"https://i.postimg.cc/SQHdD91x/bart.jpg"
+    },
+    {
+        "id":10,
+        "title":"Hogar",
+        "image":"https://i.postimg.cc/SQHdD91x/bart.jpg"
     }
 ]

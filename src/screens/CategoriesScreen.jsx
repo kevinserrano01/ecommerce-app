@@ -6,7 +6,7 @@ const CategoriesScreen = () => {
 
     const renderCategoryItem = ({ item }) => {
         return (
-          <View style={styles.categoriesContainer}>
+          <View>
             <FlatCard style={styles.flatContainer}>
                 <Image source={{uri: item.image}} style={{width: 50, height: 50}} />
                 <Text style={styles.categoriesCard}>{item.title}</Text>
@@ -16,21 +16,22 @@ const CategoriesScreen = () => {
       }
 
   return (
-    <View>
+    <>
         <Text style={styles.titleCategories}>Categorias</Text>
         <FlatList 
             data={categories}
             keyExtractor={item => item.id}
             renderItem={renderCategoryItem}
+            contentContainerStyle={{paddingBottom: 20}}
         />
-    </View>
+    </>
   )
 }
 
 export default CategoriesScreen
 
 const styles = StyleSheet.create({
-    categoriesContainer: {
+    container: {
         flex: 1,
     },
     flatContainer: {
