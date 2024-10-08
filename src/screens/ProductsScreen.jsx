@@ -1,8 +1,17 @@
-import { FlatList, StyleSheet, Text, View, Image } from 'react-native'
+import { FlatList, StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import products from '../data/products'
 import FlatCard from '../components/FlatCard'
+import { useState, useEffect } from 'react'
+import { colors } from '../global/colors'
 
-const ProductsScreen = () => {
+const ProductsScreen = ({category, setCategory}) => {
+    const [productsFiltered, setProductsFiltered] = useState([])
+
+    useEffect(() => {
+        const productsTempFiltered = products.filter(product => product.category.toLowerCase() === category.toLowerCase());
+        setProductsFiltered(productsTempFiltered)
+    }, [category]) // cada vez que cambie la categoria se ejecuta el useEffect
+    
 
     const renderProductItem = ({item}) => {
         return (
@@ -35,8 +44,11 @@ const ProductsScreen = () => {
     };
   return (
     <>
+        <Pressable style={styles.backButton} onPress={() => setCategory("")}>
+            <Text style={styles.backButtonText}>◁ Volver</Text>
+        </Pressable>
         <FlatList 
-            data={products}
+            data={productsFiltered}
             keyExtractor={item => item.id}
             renderItem={renderProductItem}
         />
@@ -57,6 +69,20 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10,
         textAlign: 'center',
+    },
+    backButton: {
+        backgroundColor: colors.Naranja, // Color de fondo azul
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 25, // Bordes redondeados
+        alignItems: 'left',
+        marginVertical: 10,
+        alignSelf: 'left', // Centrar el botón horizontalmente
+    },
+    backButtonText: {
+        color: colors.Negro, // Color del texto blanco
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     productContainer: {
         flexDirection: 'row',

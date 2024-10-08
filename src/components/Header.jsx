@@ -1,11 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { colors } from '../global/colors'
-export { colors } from '../global/colors'
 
 const Header = () => {
   return (
     <View style={styles.headerContainer}>
-      <Text style={styles.title}>Tienda Online</Text>
+      <Text style={styles.title}>Black</Text>
     </View>
   )
 }
@@ -17,7 +16,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 120,
         paddingTop: 50,
-        backgroundColor: colors.Amarillo,
+        backgroundColor: colors.Naranja,
         alignItems: 'center',
         justifyContent: 'center',
         // borderBottomLeftRadius: 25,
