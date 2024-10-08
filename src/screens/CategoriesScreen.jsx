@@ -6,12 +6,10 @@ const CategoriesScreen = () => {
 
     const renderCategoryItem = ({ item }) => {
         return (
-          <View>
             <FlatCard style={styles.flatContainer}>
                 <Image source={{uri: item.image}} style={{width: 50, height: 50}} />
                 <Text style={styles.categoriesCard}>{item.title}</Text>
             </FlatCard>
-          </View>
         )
       }
 
