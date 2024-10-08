@@ -4,6 +4,7 @@ import CategoriesScreen from './src/screens/CategoriesScreen';
 import { colors } from './src/global/colors';
 import Header from './src/components/Header';
 import ProductsScreen from './src/screens/ProductsScreen';
+import { StatusBar } from 'expo-status-bar';
 
 export function Main() {
     const insets = useSafeAreaInsets();
@@ -13,6 +14,7 @@ export function Main() {
         <Header />
         {/* <CategoriesScreen /> */}
         <ProductsScreen />
+        <StatusBar style="auto" />
     </View>
   )
 }

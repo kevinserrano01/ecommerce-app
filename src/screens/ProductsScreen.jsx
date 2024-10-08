@@ -35,7 +35,6 @@ const ProductsScreen = () => {
     };
   return (
     <>
-      <Text style={styles.title}>Productos</Text>
         <FlatList 
             data={products}
             keyExtractor={item => item.id}
