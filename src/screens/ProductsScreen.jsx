@@ -3,9 +3,12 @@ import products from '../data/products'
 import FlatCard from '../components/FlatCard'
 import { useState, useEffect } from 'react'
 import { colors } from '../global/colors'
+import Search from '../components/Search'
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ProductsScreen = ({category, setCategory}) => {
     const [productsFiltered, setProductsFiltered] = useState([])
+    const [searchResults, setSearchResults] = useState(null);
 
     useEffect(() => {
         const productsTempFiltered = products.filter(product => product.category.toLowerCase() === category.toLowerCase());
@@ -45,13 +48,30 @@ const ProductsScreen = ({category, setCategory}) => {
   return (
     <>
         <Pressable style={styles.backButton} onPress={() => setCategory("")}>
-            <Text style={styles.backButtonText}>◁ Volver</Text>
+            <Text style={styles.backButtonText}>
+                <Icon name="arrow-back-ios" size={20} color={colors.Negro} />
+            </Text>
         </Pressable>
-        <FlatList 
-            data={productsFiltered}
-            keyExtractor={item => item.id}
-            renderItem={renderProductItem}
-        />
+        <Search setSearchResults={setSearchResults} />
+        {searchResults !== null ? (
+            searchResults.length > 0 ? (
+            <FlatList 
+                data={searchResults}
+                keyExtractor={item => item.id}
+                renderItem={renderProductItem}
+                contentContainerStyle={{ paddingBottom: 20 }} // Añade espacio al final del contenido
+            />
+            ) : (
+            <Text style={styles.noResultsText}>Producto no encontrado</Text>
+            )
+        ) : (
+            <FlatList 
+                data={productsFiltered}
+                keyExtractor={item => item.id}
+                renderItem={renderProductItem}
+                contentContainerStyle={{ paddingBottom: 20 }} // Añade espacio al final del contenido
+            />
+        )}
     </>
   )
 }
@@ -87,7 +107,7 @@ const styles = StyleSheet.create({
     productContainer: {
         flexDirection: 'row',
         backgroundColor: 'white', // Fondo blanco para cada producto
-        height: 200,
+        height: 220,
         borderRadius: 8,
         padding: 10,
         margin: 10,
@@ -151,4 +171,10 @@ const styles = StyleSheet.create({
         color: '#666',
         marginTop: 5,
     },
+    noResultsText: {
+        fontSize: 18,
+        color: '#666',
+        textAlign: 'center',
+        marginTop: 20,
+      },
 })

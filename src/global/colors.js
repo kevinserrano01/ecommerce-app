@@ -1,5 +1,5 @@
 export const colors = {
-  AzulOscuro: "#181f3d",
+  AzulOscuro: "#180161",
   AzulClaro: "#3a4f76",
   Blanco: "#ffffff",
   Gris: "#c7c7c7",
@@ -7,5 +7,5 @@ export const colors = {
   Verde: "#4caf50",
   Negro: "#000000",
   Amarillo: "#FFF100",
-  Naranja: "#FF6500",
+  Naranja: "#FF7D29",
 };
