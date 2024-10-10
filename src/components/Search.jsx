@@ -12,9 +12,6 @@ const Search = ({ setSearch }) => {
           placeholderTextColor="#888"
           onChangeText={(text)=>setSearch(text)}
         />
-        <Pressable style={styles.searchButton}>
-          <Text style={styles.searchButtonText}> 🔍 </Text>
-        </Pressable>
       </View>
     </View>
   )
@@ -49,17 +46,5 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         paddingHorizontal: 10,
         color: '#000',
-    },
-    searchButton: {
-        backgroundColor: colors.Naranja,
-        borderRadius: 20,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        marginLeft: 10,
-    },
-    searchButtonText: {
-        color: colors.Blanco,
-        fontSize: 10,
-        fontWeight: 'bold',
     },
 })

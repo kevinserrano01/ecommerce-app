@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View, Image, Pressable } from 'react-native'
+import { FlatList, StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native'
 import products from '../data/products'
 import FlatCard from '../components/FlatCard'
 import { useState, useEffect } from 'react'
@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const ProductsScreen = ({category, setCategory, setProductId}) => {
     const [productsFiltered, setProductsFiltered] = useState([])
     const [search, setSearch] = useState("");
+    const {width, height} = useWindowDimensions(); // Obtener las dimensiones de la ventana del dispositivo
 
     useEffect(() => {
         const productsTempFiltered = products.filter(product => product.category.toLowerCase() === category.toLowerCase());
@@ -17,7 +18,7 @@ const ProductsScreen = ({category, setCategory, setProductId}) => {
             const productsTempSearch = productsTempFiltered.filter(product => product.title.toLowerCase().includes(search.toLowerCase()));
             setProductsFiltered(productsTempSearch)
         }
-    }, [category, search]) // cada vez que cambie la categoria se ejecuta el useEffect
+    }, [category, search]) // cada vez que cambie la categoria y el search se ejecuta el useEffect
     
 
     const renderProductItem = ({item}) => {
@@ -172,3 +173,69 @@ const styles = StyleSheet.create({
         marginTop: 20,
       },
 })
+
+const stylesSmall = StyleSheet.create({
+    productContainer: {
+        flexDirection: 'column',
+        height: 'auto',
+    },
+    imageContainer: {
+        width: '100%',
+        height: 200,
+    },
+    productImage: {
+        width: '100%',
+        height: '100%',
+    },
+    productDetails: {
+        flex: 1,
+        justifyContent: 'center',
+        padding: 10,
+    },
+    productDescription: {
+        fontSize: 14,
+        color: '#666',
+        marginBottom: 5,
+    },
+    productTitle: {
+        fontSize: 20,
+        color: '#000',
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    productPrice: {
+        fontSize: 17,
+        color: '#000',
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    productDiscount: {
+        fontSize: 14,
+        color: 'green',
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    productTag: {
+        fontSize: 12,
+        color: '#777',
+        backgroundColor: '#e0e0e0',
+        paddingHorizontal: 6,
+        paddingVertical: 5,
+        marginRight: 5,
+        marginTop: 6,
+        height: 25,
+        borderRadius: 12,
+        overflow: 'hidden', // Asegura que el contenido se ajuste a los bordes redondeados
+    },
+    productStock: {
+        fontSize: 14,
+        color: '#666',
+        marginTop: 5,
+    },
+    noResultsText: {
+        fontSize: 18,
+        color: '#666',
+        textAlign: 'center',
+        marginTop: 20,
+      },
+}) // Estilos para pantallas pequeñas
