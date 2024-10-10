@@ -1,24 +1,7 @@
 import { StyleSheet, Text, View, TextInput, Pressable, Alert } from 'react-native'
 import { colors } from '../global/colors'
-import { useState } from 'react'
-import products from '../data/products.json'
 
-const Search = ({ setSearchResults }) => {
-    // Almacenar los productos encontrados en un estado (setSearchResults)
-    const [searchText, setSearchText] = useState(''); // Estado para el texto de búsqueda
-
-    const handleSearch = () => {
-        const foundProducts = products.filter(product => 
-          product.title.toLowerCase().includes(searchText.toLowerCase())
-        );
-    
-        if (foundProducts.length > 0) {
-          setSearchResults(foundProducts);
-        } else {
-          setSearchResults([]);
-          Alert.alert('Producto no encontrado', 'No se encontró ningún producto con ese nombre');
-        }
-      };
+const Search = ({ setSearch }) => {
 
   return (
     <View style={styles.container}>
@@ -27,10 +10,9 @@ const Search = ({ setSearchResults }) => {
           style={styles.searchInput}
           placeholder="Buscar productos..."
           placeholderTextColor="#888"
-          value={searchText}
-          onChangeText={setSearchText}
+          onChangeText={(text)=>setSearch(text)}
         />
-        <Pressable style={styles.searchButton} onPress={handleSearch}>
+        <Pressable style={styles.searchButton}>
           <Text style={styles.searchButtonText}> 🔍 </Text>
         </Pressable>
       </View>

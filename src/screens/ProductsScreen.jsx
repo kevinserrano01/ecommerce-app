@@ -6,18 +6,23 @@ import { colors } from '../global/colors'
 import Search from '../components/Search'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const ProductsScreen = ({category, setCategory}) => {
+const ProductsScreen = ({category, setCategory, setProductId}) => {
     const [productsFiltered, setProductsFiltered] = useState([])
-    const [searchResults, setSearchResults] = useState(null);
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         const productsTempFiltered = products.filter(product => product.category.toLowerCase() === category.toLowerCase());
         setProductsFiltered(productsTempFiltered)
-    }, [category]) // cada vez que cambie la categoria se ejecuta el useEffect
+        if(search){
+            const productsTempSearch = productsTempFiltered.filter(product => product.title.toLowerCase().includes(search.toLowerCase()));
+            setProductsFiltered(productsTempSearch)
+        }
+    }, [category, search]) // cada vez que cambie la categoria se ejecuta el useEffect
     
 
     const renderProductItem = ({item}) => {
         return (
+            <Pressable onPress={() => setProductId(item.id)}>
             <FlatCard style={styles.productContainer}>
                 <View style={styles.imageContainer}>
                     <Image
@@ -43,6 +48,8 @@ const ProductsScreen = ({category, setCategory}) => {
                     <Text style={styles.productPrice}> ${item.price} </Text>
                 </View>
             </FlatCard>
+            </Pressable>
+            
         )
     };
   return (
@@ -52,26 +59,13 @@ const ProductsScreen = ({category, setCategory}) => {
                 <Icon name="arrow-back-ios" size={20} color={colors.Negro} />
             </Text>
         </Pressable>
-        <Search setSearchResults={setSearchResults} />
-        {searchResults !== null ? (
-            searchResults.length > 0 ? (
-            <FlatList 
-                data={searchResults}
-                keyExtractor={item => item.id}
-                renderItem={renderProductItem}
-                contentContainerStyle={{ paddingBottom: 20 }} // Añade espacio al final del contenido
-            />
-            ) : (
-            <Text style={styles.noResultsText}>Producto no encontrado</Text>
-            )
-        ) : (
-            <FlatList 
-                data={productsFiltered}
-                keyExtractor={item => item.id}
-                renderItem={renderProductItem}
-                contentContainerStyle={{ paddingBottom: 20 }} // Añade espacio al final del contenido
-            />
-        )}
+        <Search setSearch={setSearch} />
+        <FlatList 
+            data={productsFiltered}
+            keyExtractor={item => item.id}
+            renderItem={renderProductItem}
+            contentContainerStyle={{ paddingBottom: 20 }} // Añade espacio al final del contenido
+        />
     </>
   )
 }
