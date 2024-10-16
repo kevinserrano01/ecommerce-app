@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { colors } from '../global/colors'
-import Search from './Search'
 
-const Header = () => {
+const Header = ({subtitle}) => {
   return (
     <View style={styles.headerContainer}>
       <Text style={styles.title}>Black</Text>
+      <Text style={styles.title}>{subtitle}</Text>
       {/* <Search /> */}
     </View>
   )

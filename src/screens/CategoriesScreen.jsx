@@ -2,11 +2,13 @@ import { FlatList, StyleSheet, Text, View, Image, Pressable } from 'react-native
 import categories from '../data/categories.json'
 import FlatCard from '../components/FlatCard'
 
-const CategoriesScreen = ({setCategory}) => {
+const CategoriesScreen = ({navigation}) => {
 
-    const renderCategoryItem = ({ item, index }) => {
+    console.log('CategoriesScreen')
+
+    const renderCategoryItem = ({ item }) => {
         return (
-            <Pressable onPress={() => setCategory(item.title)}>
+            <Pressable onPress={() => navigation.navigate('Productos', item.title)}>
                 <FlatCard style={styles.flatContainer}>
                     <Image source={{uri: item.image}} style={{width: 50, height: 50}} />
                     <Text style={styles.categoriesCard}>{item.title}</Text>
@@ -31,9 +33,6 @@ const CategoriesScreen = ({setCategory}) => {
 export default CategoriesScreen
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     flatContainer: {
         margin: 10,
         padding: 10,

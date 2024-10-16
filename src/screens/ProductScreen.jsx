@@ -4,8 +4,9 @@ import { colors } from '../global/colors';
 import { useEffect, useState } from 'react';
 import products from '../data/products';
 
-const ProductScreen = ({ productId, setProductId }) => {
+const ProductScreen = ({ route, navigation }) => {
     const [productFound, setProductFound] = useState({})
+    const productId = route.params // Obtener el id del producto de la pantalla anterior
 
     useEffect(() => {
         const product = products.find(product => product.id === productId)
@@ -14,7 +15,7 @@ const ProductScreen = ({ productId, setProductId }) => {
     
   return (
     <>
-    <Pressable style={styles.backButton} onPress={() => setProductId(null)}>
+    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
         <Icon name="arrow-back-ios" size={20} color={colors.Negro} />
     </Pressable>
 

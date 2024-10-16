@@ -6,10 +6,14 @@ import { colors } from '../global/colors'
 import Search from '../components/Search'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const ProductsScreen = ({category, setCategory, setProductId}) => {
+const ProductsScreen = ({ route, navigation }) => {
+    console.log('CategoriesScreen')
+    
     const [productsFiltered, setProductsFiltered] = useState([])
     const [search, setSearch] = useState("");
     const {width, height} = useWindowDimensions(); // Obtener las dimensiones de la ventana del dispositivo
+
+    const category = route.params; // Obtener la categoría de la pantalla anterior
 
     useEffect(() => {
         const productsTempFiltered = products.filter(product => product.category.toLowerCase() === category.toLowerCase());
@@ -23,7 +27,7 @@ const ProductsScreen = ({category, setCategory, setProductId}) => {
 
     const renderProductItem = ({item}) => {
         return (
-            <Pressable onPress={() => setProductId(item.id)}>
+            <Pressable onPress={() =>navigation.navigate('Producto', item.id)}>
             <FlatCard style={styles.productContainer}>
                 <View style={styles.imageContainer}>
                     <Image
@@ -55,7 +59,7 @@ const ProductsScreen = ({category, setCategory, setProductId}) => {
     };
   return (
     <>
-        <Pressable style={styles.backButton} onPress={() => setCategory("")}>
+        <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
             <Text style={styles.backButtonText}>
                 <Icon name="arrow-back-ios" size={20} color={colors.Negro} />
             </Text>

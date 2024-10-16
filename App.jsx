@@ -1,10 +1,11 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { Main } from "./Main";
 import { colors } from './src/global/colors';
 import { useFonts } from "expo-font";
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from "react";
+import Header from "./src/components/Header";
+import Navigator from "./src/navigation/Navigator";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,15 +26,11 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <View style={styles.container}>
-        <Main />
-      </View>
+      <Header />
+      <Navigator />
+      <StatusBar style="auto" />
     </SafeAreaProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.Gris,
-  },
-});
+const styles = StyleSheet.create({});
