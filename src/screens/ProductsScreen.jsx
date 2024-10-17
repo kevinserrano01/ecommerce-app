@@ -59,12 +59,12 @@ const ProductsScreen = ({ route, navigation }) => {
     };
   return (
     <>
-        <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+        {/* <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
             <Text style={styles.backButtonText}>
                 <Icon name="arrow-back-ios" size={20} color={colors.Negro} />
             </Text>
-        </Pressable>
-        <Search setSearch={setSearch} />
+        </Pressable> */}
+        <Search setSearch={setSearch}/>
         <FlatList 
             data={productsFiltered}
             keyExtractor={item => item.id}

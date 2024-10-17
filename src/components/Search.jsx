@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Pressable, Alert } from 'react-native'
+import { StyleSheet, View, TextInput } from 'react-native'
 import { colors } from '../global/colors'
 
 const Search = ({ setSearch }) => {
@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
+        marginBottom: 30,
     },
     searchContainer: {
         flexDirection: 'row',

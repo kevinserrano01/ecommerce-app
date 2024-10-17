@@ -19,7 +19,6 @@ const CategoriesScreen = ({navigation}) => {
 
   return (
     <>
-        <Text style={styles.titleCategories}>Categorias</Text>
         <FlatList 
             data={categories}
             keyExtractor={item => item.id}

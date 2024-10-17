@@ -15,9 +15,9 @@ const ProductScreen = ({ route, navigation }) => {
     
   return (
     <>
-    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+    {/* <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
         <Icon name="arrow-back-ios" size={20} color={colors.Negro} />
-    </Pressable>
+    </Pressable> */}
 
     <ScrollView style={styles.container}>
       <Image source={{ uri: productFound.mainImage }} style={styles.productImage} />
