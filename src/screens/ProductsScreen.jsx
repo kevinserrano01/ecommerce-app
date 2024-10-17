@@ -7,7 +7,6 @@ import Search from '../components/Search'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ProductsScreen = ({ route, navigation }) => {
-    console.log('CategoriesScreen')
     
     const [productsFiltered, setProductsFiltered] = useState([])
     const [search, setSearch] = useState("");

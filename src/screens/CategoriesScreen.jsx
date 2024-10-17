@@ -4,8 +4,6 @@ import FlatCard from '../components/FlatCard'
 
 const CategoriesScreen = ({navigation}) => {
 
-    console.log('CategoriesScreen')
-
     const renderCategoryItem = ({ item }) => {
         return (
             <Pressable onPress={() => navigation.navigate('Productos', item.title)}>
