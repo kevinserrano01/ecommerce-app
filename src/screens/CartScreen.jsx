@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 20,
     justifyContent: "flex-start",
-    margin: 16,
+    margin: 10,
     alignItems: "center",
     gap: 10,
     height: 170,
