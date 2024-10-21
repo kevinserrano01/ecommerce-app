@@ -1,22 +1,62 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { StyleSheet } from "react-native";
 import ShopNavigator from "./ShopNavigator";
 import CartNavigator from "./CartNavigator";
 import ReceiptsNavigator from "./ReceiptsNavigator";
+import { colors } from '../global/colors'
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return (
     <NavigationContainer>
-        <Tab.Navigator>
-            <Tab.Screen name="Shop" component={ShopNavigator} />
-            <Tab.Screen name="Cart" component={CartNavigator} />
-            <Tab.Screen name="Receips" component={ReceiptsNavigator} />
+        <Tab.Navigator
+            initialRouteName="Shop"
+            screenOptions={{
+                headerShown: false, // Quitar el header
+                tabBarShowLabel: false, // Quitar el texto de las pestañas
+                tabBarStyle: styles.tabBar,
+            }}
+        >
+            <Tab.Screen 
+                name="Shop"
+                component={ShopNavigator}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <Icon name="shopping-bag" color={focused?colors.Naranja:colors.Gris} size={32} />
+                    )
+                }}
+            />
+            <Tab.Screen
+                name="Cart"
+                component={CartNavigator}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <Icon name="shopping-cart" color={focused?colors.Naranja:colors.Gris} size={32} />
+                    )
+                }}
+            />
+            <Tab.Screen
+                name="Receips"
+                component={ReceiptsNavigator}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <Icon name="receipt-long" color={focused?colors.Naranja:colors.Gris} size={32} />
+                    )
+                }}
+            />
         </Tab.Navigator>
     </NavigationContainer>
   )
 }
 
 export default TabNavigator
+
+const styles = StyleSheet.create({
+    tabBar: {
+        backgroundColor: '#fff',
+        height: 80,
+    }
+})
