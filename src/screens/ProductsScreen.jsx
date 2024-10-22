@@ -1,27 +1,27 @@
 import { FlatList, StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native'
-import products from '../data/products'
 import FlatCard from '../components/FlatCard'
 import { useState, useEffect } from 'react'
 import { colors } from '../global/colors'
 import Search from '../components/Search'
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useSelector } from 'react-redux'
 
 const ProductsScreen = ({ route, navigation }) => {
-    
+    const products = useSelector(state => state.shopSlice.value.products) // Agarra el valor de la store de redux
     const [productsFiltered, setProductsFiltered] = useState([])
     const [search, setSearch] = useState("");
     const {width, height} = useWindowDimensions(); // Obtener las dimensiones de la ventana del dispositivo
 
-    const category = route.params; // Obtener la categoría de la pantalla anterior
+    // const category = route.params; // Obtener la categoría de la pantalla anterior
+    const productsFilteredByCategory = useSelector(state => state.shopSlice.value.productsFilteredByCategory)
 
     useEffect(() => {
-        const productsTempFiltered = products.filter(product => product.category.toLowerCase() === category.toLowerCase());
-        setProductsFiltered(productsTempFiltered)
+        setProductsFiltered(productsFilteredByCategory)
         if(search){
-            const productsTempSearch = productsTempFiltered.filter(product => product.title.toLowerCase().includes(search.toLowerCase()));
+            const productsTempSearch = productsFilteredByCategory.filter(product => product.title.toLowerCase().includes(search.toLowerCase()));
             setProductsFiltered(productsTempSearch)
         }
-    }, [category, search]) // cada vez que cambie la categoria y el search se ejecuta el useEffect
+    }, [search]) // cada vez que cambie la categoria y el search se ejecuta el useEffect
     
 
     const renderProductItem = ({item}) => {

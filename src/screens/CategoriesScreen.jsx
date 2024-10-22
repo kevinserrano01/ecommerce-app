@@ -1,12 +1,20 @@
 import { FlatList, StyleSheet, Text, View, Image, Pressable } from 'react-native'
-import categories from '../data/categories.json'
+// import categories from '../data/categories.json'
 import FlatCard from '../components/FlatCard'
+import { useSelector, useDispatch } from 'react-redux' // Me permite agarrar algo de la store de redux. useSelector es un hook
+import { setCategory } from '../features/shop/shopSlice'
 
 const CategoriesScreen = ({navigation}) => {
+    const categories = useSelector(state => state.shopSlice.value.categories) // Agarra el valor de la store de redux
+    const dispatch = useDispatch() // Me permite despachar una accion a la store de redux
 
     const renderCategoryItem = ({ item }) => {
         return (
-            <Pressable onPress={() => navigation.navigate('Productos', item.title)}>
+            <Pressable onPress={() => {
+                    dispatch(setCategory(item.title)) // Despacha la accion setCategory con el valor de la categoria
+                    navigation.navigate('Productos', item.title) // Navega a la pantalla de productos con el valor de la categoria
+                }
+            }>
                 <FlatCard style={styles.flatContainer}>
                     <Image source={{uri: item.image}} style={{width: 50, height: 50}} />
                     <Text style={styles.categoriesCard}>{item.title}</Text>

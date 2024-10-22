@@ -5,6 +5,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from "react";
 import Header from "./src/components/Header";
 import TabNavigator from "./src/navigation/TabNavigator";
+import { store } from "./src/app/store";
+import { Provider } from "react-redux";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,11 +26,13 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <Header />
-      <TabNavigator />
-      <StatusBar style="auto" />
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <SafeAreaProvider>
+          <Header />
+          <TabNavigator />
+          <StatusBar style="auto" />
+      </SafeAreaProvider>
+    </Provider>
   );
 }
 
