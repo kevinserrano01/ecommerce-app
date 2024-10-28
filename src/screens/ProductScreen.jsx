@@ -1,50 +1,54 @@
-import { StyleSheet, Text, View, Image, Pressable, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, Pressable, ScrollView, ActivityIndicator } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { colors } from '../global/colors';
-import { useEffect, useState } from 'react';
-import products from '../data/products';
+import { useSelector, useDispatch } from 'react-redux';
+import { useGetProductQuery } from '../services/shopService';
 
 const ProductScreen = ({ route, navigation }) => {
-    const [productFound, setProductFound] = useState({})
-    const productId = route.params // Obtener el id del producto de la pantalla anterior
-
-    useEffect(() => {
-        const product = products.find(product => product.id === productId)
-        setProductFound(product)
-    }, [productId])
+    const productId = useSelector(state => state.shopSlice.value.productId) // Agarra el valor de la store de redux
+    console.log(productId)
+    const { data:productFound, error, isLoading } = useGetProductQuery(productId) // Hook de redux query
+    console.log("Product found:", productFound)
+    const dispatch = useDispatch()
     
   return (
     <>
-    {/* <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Icon name="arrow-back-ios" size={20} color={colors.Negro} />
-    </Pressable> */}
-
-    <ScrollView style={styles.container}>
-      <Image source={{ uri: productFound.mainImage }} style={styles.productImage} />
-      <View style={styles.productDetails}>
-        <Text style={styles.productTitle}>{productFound.title}</Text>
-        <Text style={styles.productDescription}>{productFound.longDescription}</Text>
-        {productFound.discount > 0 && (
-          <Text style={styles.productDiscount}>{productFound.discount}% OFF</Text>
-        )}
-        <Text style={styles.productPrice}>${productFound.price}</Text>
-        <Text style={styles.productStock}>Stock: {productFound.stock}</Text>
-        <View style={styles.tagsContainer}>
-          {productFound.tags && productFound.tags.map(tag => (
-            <Text key={tag} style={styles.productTag}>{tag}</Text>
-          ))}
-        </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <Pressable style={styles.cartButton}>
-          <Text style={styles.cartButtonText}>Agregar al carrito</Text>
-        </Pressable>
-        <Pressable style={styles.buyButton}>
-          <Text style={styles.buyButtonText}>Comprar</Text>
-        </Pressable>
-      </View>
-    </ScrollView>
+        {
+            isLoading && <ActivityIndicator size="large" color="#0000ff" />
+        }
+        {
+            error && <Text>Error: Error al cargar los detalles del producto</Text>
+        }
+        <ScrollView style={styles.container}>
+          <Image source={{ uri: productFound.mainImage }} style={styles.productImage} />
+          <View style={styles.productDetails}>
+            <Text style={styles.productTitle}>{productFound.title}</Text>
+            <Text style={styles.productDescription}>{productFound.longDescription}</Text>
+            {productFound.discount > 0 && (
+              <Text style={styles.productDiscount}>{productFound.discount}% OFF</Text>
+            )}
+            <Text style={styles.productPrice}>${productFound.price}</Text>
+            <Text style={styles.productStock}>Stock: {productFound.stock}</Text>
+            <View style={styles.tagsContainer}>
+              {productFound.tags && productFound.tags.map(tag => (
+                <Text key={tag} style={styles.productTag}>{tag}</Text>
+              ))}
+            </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Pressable
+              style={styles.cartButton}
+              onPress={() => dispatch(addItem({...productFound, quantity: 1}))}
+              >
+              <Text style={styles.cartButtonText}>Agregar al carrito</Text>
+            </Pressable>
+            <Pressable style={styles.buyButton}>
+              <Text style={styles.buyButtonText}>Comprar</Text>
+            </Pressable>
+          </View>
+        </ScrollView>
     </>
+    
     
   )
 }

@@ -1,19 +1,22 @@
-import { FlatList, StyleSheet, Text, View, Image, Pressable, useWindowDimensions } from 'react-native'
+import { FlatList, StyleSheet, Text, View, Image, Pressable, useWindowDimensions, ActivityIndicator } from 'react-native'
 import FlatCard from '../components/FlatCard'
 import { useState, useEffect } from 'react'
 import { colors } from '../global/colors'
 import Search from '../components/Search'
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { useGetProductsByCategoryQuery } from '../services/shopService'
+import { setProductId } from '../features/shop/shopSlice'
 
 const ProductsScreen = ({ route, navigation }) => {
-    const products = useSelector(state => state.shopSlice.value.products) // Agarra el valor de la store de redux
+    // const products = useSelector(state => state.shopSlice.value.products) // Agarra el valor de la store de redux
     const [productsFiltered, setProductsFiltered] = useState([])
     const [search, setSearch] = useState("");
     const {width, height} = useWindowDimensions(); // Obtener las dimensiones de la ventana del dispositivo
+    const category = useSelector(state => state.shopSlice.value.categorySelected)
+    const { data:productsFilteredByCategory, error, isLoading } = useGetProductsByCategoryQuery(category) // Hook de redux query
 
-    // const category = route.params; // Obtener la categoría de la pantalla anterior
-    const productsFilteredByCategory = useSelector(state => state.shopSlice.value.productsFilteredByCategory)
+    dispatch = useDispatch()
 
     useEffect(() => {
         setProductsFiltered(productsFilteredByCategory)
@@ -21,12 +24,15 @@ const ProductsScreen = ({ route, navigation }) => {
             const productsTempSearch = productsFilteredByCategory.filter(product => product.title.toLowerCase().includes(search.toLowerCase()));
             setProductsFiltered(productsTempSearch)
         }
-    }, [search]) // cada vez que cambie la categoria y el search se ejecuta el useEffect
+    }, [search, productsFilteredByCategory]) // cada vez que cambie la categoria y el search se ejecuta el useEffect
     
 
     const renderProductItem = ({item}) => {
         return (
-            <Pressable onPress={() =>navigation.navigate('Producto', item.id)}>
+            <Pressable onPress={() =>{
+                dispatch(setProductId(item.id))
+                navigation.navigate("Producto")
+            }}>
             <FlatCard style={styles.productContainer}>
                 <View style={styles.imageContainer}>
                     <Image
@@ -58,11 +64,12 @@ const ProductsScreen = ({ route, navigation }) => {
     };
   return (
     <>
-        {/* <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Text style={styles.backButtonText}>
-                <Icon name="arrow-back-ios" size={20} color={colors.Negro} />
-            </Text>
-        </Pressable> */}
+        {
+            isLoading && <ActivityIndicator size="large" color="#0000ff" />
+        }
+        {
+            error && <Text>Error: Error al cargar los productos</Text>
+        }
         <Search setSearch={setSearch}/>
         <FlatList 
             data={productsFiltered}

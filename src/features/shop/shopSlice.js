@@ -10,7 +10,7 @@ const shopSlice = createSlice({
       products: products, // Agrega el json de productos a la store de redux
       categorySelected: "", // Agrega la categoria seleccionada a la store de redux
       productsFilteredByCategory: [], // Agrega los productos filtrados a la store de redux
-      productIdSelected: null, // Agrega el id del producto seleccionado a la store de redux
+      productId: null, // Agrega el id del producto seleccionado a la store de redux
     },
   },
   reducers: {
@@ -19,15 +19,15 @@ const shopSlice = createSlice({
       state.value.productsFilteredByCategory = products.filter(
         (product) =>
           product.category.toLowerCase() === action.payload.toLowerCase()
-      ); // Filtra los productos por categoria
-      state.categorySelected = action.payload; // Cambia el valor de la categoria seleccionada
+      );
+      state.value.categorySelected = action.payload;
     },
     setProductId: (state, action) => {
-      state.productIdSelected = action.payload; // Cambia el valor del id del producto seleccionado
+      state.value.productId = action.payload; // Cambia el valor del id del producto seleccionado
     },
   },
 });
 
-export const { setCategory } = shopSlice.actions; // Exporta las acciones
+export const { setCategory, setProductId } = shopSlice.actions; // Exporta las acciones
 
 export default shopSlice.reducer; // Exporta el reducer
