@@ -3,15 +3,16 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { colors } from '../global/colors';
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetProductQuery } from '../services/shopService';
+import { addItem } from '../features/cart/cartSlice';
 
-const ProductScreen = ({ route, navigation }) => {
+const ProductScreen = () => {
     const productId = useSelector(state => state.shopSlice.value.productId) // Agarra el valor de la store de redux
     console.log(productId)
     const { data:productFound, error, isLoading } = useGetProductQuery(productId) // Hook de redux query
     console.log("Product found:", productFound)
     const dispatch = useDispatch()
     
-  return (
+   return (
     <>
         {
             isLoading && <ActivityIndicator size="large" color="#0000ff" />

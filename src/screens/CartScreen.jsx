@@ -1,17 +1,14 @@
 import { FlatList, StyleSheet, Text, View, Image,Pressable } from 'react-native'
 import React from 'react'
-import cart from '../data/cart.json'
 import { colors } from '../global/colors'
 import FlatCard from '../components/FlatCard'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
 const CartScreen = () => {
-  const [total, setTotal] = useState(0)
+    const cart = useSelector(state=>state.cartReducer.value.cartItems)
+    const total = useSelector(state=>state.cartReducer.value.total)
 
-  useEffect(()=>{
-    setTotal(cart.reduce((acumulador, item)=>(acumulador+=item.price*item.quantity),0))
-  },[cart])
 
   const FooterComponent = () => (
     <View style={styles.footerContainer}>
