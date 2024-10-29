@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useGetProductQuery } from '../services/shopService';
 import { addItem } from '../features/cart/cartSlice';
 
-const ProductScreen = () => {
+const ProductScreen = ({}) => {
     const productId = useSelector(state => state.shopSlice.value.productId) // Agarra el valor de la store de redux
     console.log(productId)
     const { data:productFound, error, isLoading } = useGetProductQuery(productId) // Hook de redux query

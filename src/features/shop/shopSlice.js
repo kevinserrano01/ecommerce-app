@@ -6,8 +6,8 @@ const shopSlice = createSlice({
   name: "shop",
   initialState: {
     value: {
-      categories: categories, // Agrega el json de categorias a la store de redux
-      products: products, // Agrega el json de productos a la store de redux
+      // categories: categories, // Agrega el json de categorias a la store de redux
+      // products: products, // Agrega el json de productos a la store de redux
       categorySelected: "", // Agrega la categoria seleccionada a la store de redux
       productsFilteredByCategory: [], // Agrega los productos filtrados a la store de redux
       productId: null, // Agrega el id del producto seleccionado a la store de redux
