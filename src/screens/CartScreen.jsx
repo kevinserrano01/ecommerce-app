@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     margin: 10,
     alignItems: "center",
     gap: 10,
-    height: 170,
+    height: 190,
 },
 cartImage: {
     width: 80,

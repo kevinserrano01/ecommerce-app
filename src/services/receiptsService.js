@@ -6,7 +6,7 @@ export const receiptApi = createApi({
   reducerPath: "receiptsApi",
   baseQuery: fetchBaseQuery({ baseUrl: database }),
   endpoints: (builder) => ({
-    postReceip: builder.mutation({
+    postReceipt: builder.mutation({
       query: ({ ...receipt }) => ({
         url: `receipts.json`,
         method: "POST",

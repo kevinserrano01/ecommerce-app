@@ -7,48 +7,50 @@ import { addItem } from '../features/cart/cartSlice';
 
 const ProductScreen = ({}) => {
     const productId = useSelector(state => state.shopSlice.value.productId) // Agarra el valor de la store de redux
-    console.log(productId)
     const { data:productFound, error, isLoading } = useGetProductQuery(productId) // Hook de redux query
-    console.log("Product found:", productFound)
     const dispatch = useDispatch()
+
+    if (isLoading) {
+      return <ActivityIndicator size="large" color="#0000ff" />;
+    }
+
+    if (error) {
+        return <Text>Error: Error al cargar los detalles del producto</Text>;
+    }
+
+    if (!productFound) {
+        return <Text>No se encontró el producto</Text>;
+    }
     
    return (
-    <>
-        {
-            isLoading && <ActivityIndicator size="large" color="#0000ff" />
-        }
-        {
-            error && <Text>Error: Error al cargar los detalles del producto</Text>
-        }
-        <ScrollView style={styles.container}>
-          <Image source={{ uri: productFound.mainImage }} style={styles.productImage} />
-          <View style={styles.productDetails}>
-            <Text style={styles.productTitle}>{productFound.title}</Text>
-            <Text style={styles.productDescription}>{productFound.longDescription}</Text>
-            {productFound.discount > 0 && (
-              <Text style={styles.productDiscount}>{productFound.discount}% OFF</Text>
-            )}
-            <Text style={styles.productPrice}>${productFound.price}</Text>
-            <Text style={styles.productStock}>Stock: {productFound.stock}</Text>
-            <View style={styles.tagsContainer}>
-              {productFound.tags && productFound.tags.map(tag => (
-                <Text key={tag} style={styles.productTag}>{tag}</Text>
-              ))}
-            </View>
+      <ScrollView style={styles.container}>
+        <Image source={{ uri: productFound.mainImage }} style={styles.productImage} />
+        <View style={styles.productDetails}>
+          <Text style={styles.productTitle}>{productFound.title}</Text>
+          <Text style={styles.productDescription}>{productFound.longDescription}</Text>
+          {productFound.discount > 0 && (
+            <Text style={styles.productDiscount}>{productFound.discount}% OFF</Text>
+          )}
+          <Text style={styles.productPrice}>${productFound.price}</Text>
+          <Text style={styles.productStock}>Stock: {productFound.stock}</Text>
+          <View style={styles.tagsContainer}>
+            {productFound.tags && productFound.tags.map(tag => (
+              <Text key={tag} style={styles.productTag}>{tag}</Text>
+            ))}
           </View>
-          <View style={styles.buttonContainer}>
-            <Pressable
-              style={styles.cartButton}
-              onPress={() => dispatch(addItem({...productFound, quantity: 1}))}
-              >
-              <Text style={styles.cartButtonText}>Agregar al carrito</Text>
-            </Pressable>
-            <Pressable style={styles.buyButton}>
-              <Text style={styles.buyButtonText}>Comprar</Text>
-            </Pressable>
-          </View>
-        </ScrollView>
-    </>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Pressable
+            style={styles.cartButton}
+            onPress={() => dispatch(addItem({...productFound, quantity: 1}))}
+            >
+            <Text style={styles.cartButtonText}>Agregar al carrito</Text>
+          </Pressable>
+          <Pressable style={styles.buyButton}>
+            <Text style={styles.buyButtonText}>Comprar</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
     
     
   )
