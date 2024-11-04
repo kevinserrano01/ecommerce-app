@@ -19,6 +19,7 @@ export const cartSlice = createSlice({
       );
       if (!productInCart) {
         state.value.cartItems.push(action.payload); //action.payload es el producto
+        state.value.cartLenght += 1;
       } else {
         state.value.cartItems.map((item) => {
           if (item.id === action.payload.id) {
@@ -49,7 +50,7 @@ export const cartSlice = createSlice({
     clearCart: (state) => {
       state.value.cartItems = [];
       state.value.cartLenght = 0;
-      state.value.total = 0;
+      state.value.total = null;
     },
   },
 });

@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View, Image,Pressable } from 'react-native'
+import { FlatList, StyleSheet, Text, View, Image,Pressable, Button } from 'react-native'
 import React from 'react'
 import { colors } from '../global/colors'
 import FlatCard from '../components/FlatCard'
@@ -11,7 +11,7 @@ const CartScreen = ({navigation}) => {
     const cart = useSelector(state=>state.cartReducer.value.cartItems)
     const total = useSelector(state=>state.cartReducer.value.total)
     const [triggerPost, result] = usePostReceiptMutation()
-
+    const cartLength = useSelector(state=>state.cartReducer.value.cartLenght)
     const dispatch = useDispatch()
 
   const FooterComponent = () => (
@@ -22,7 +22,7 @@ const CartScreen = ({navigation}) => {
             onPress={() => {
                 triggerPost({ cart, total, createdAt: Date.now()})
                 dispatch(clearCart())
-                navigation.navigate('Receipts')
+                navigation.navigate('Receips')
             }}    
         >
             <Text style={styles.confirmButtonText}>Confirmar</Text>
@@ -51,13 +51,23 @@ const CartScreen = ({navigation}) => {
   )
 
   return (
-    <FlatList
-      data={cart}
-      keyExtractor={item => item.id}
-      renderItem={renderCartItem}
-      // ListHeaderComponent={<Text style={styles.cartScreenTitle}>Tu carrito:</Text>}
-      ListFooterComponent={<FooterComponent />}
-    />
+    <>
+    {cartLength > 0 ?
+        <FlatList
+            data={cart}
+            renderItem={renderCartItem}
+            keyExtractor={item => item.id}
+            ListFooterComponent={FooterComponent}
+        />
+    :
+        <View style={styles.container}>
+            <Icon name="shopping-cart" size={100} color="#ccc" />
+            <Text style={styles.cartScreenTitle}>Aún no hay productos en el carrito</Text>
+            <Button title="Explorar productos" onPress={() => navigation.navigate('Shop')} />
+        </View>
+    }
+    </>
+    
   )
 }
 
@@ -72,56 +82,62 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     height: 190,
-},
-cartImage: {
-    width: 80,
-    height: 80
-},
-cartDescription: {
-    width: '80%',
-    padding: 20,
-},
-title: {
-    fontSize: 16,
-    fontWeight: '700'
-},
-description: {
-    marginBottom: 16,
-},
-total: {
-    marginTop: 16,
-    fontSize: 16,
-    fontWeight: '700'
-},
-trashIcon: {
-    alignSelf: 'flex-end',
-    marginRight: 16,
-},
-footerContainer: {
-    padding: 32,
-    gap: 8,
-    justifyContent: 'center',
-    alignItems: 'center'
-},
-footerTotal: {
-    fontSize: 16,
-    fontWeight: '700'
-},
-confirmButton: {
-    padding: 8,
-    paddingHorizontal: 16,
-    backgroundColor: colors.morado,
-    borderRadius: 16,
-    marginBottom: 24,
-},
-confirmButtonText: {
-    color: colors.blanco,
-    fontSize: 16,
-    fontWeight: '700'
-}, cartScreenTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    textAlign: "center",
-    paddingVertical: 8
-}
+    },
+    cartImage: {
+        width: 80,
+        height: 80
+    },
+    cartDescription: {
+        width: '80%',
+        padding: 20,
+    },
+    title: {
+        fontSize: 16,
+        fontWeight: '700'
+    },
+    description: {
+        marginBottom: 16,
+    },
+    total: {
+        marginTop: 16,
+        fontSize: 16,
+        fontWeight: '700'
+    },
+    trashIcon: {
+        alignSelf: 'flex-end',
+        marginRight: 16,
+    },
+    footerContainer: {
+        padding: 32,
+        gap: 8,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    footerTotal: {
+        fontSize: 16,
+        fontWeight: '700'
+    },
+    confirmButton: {
+        padding: 8,
+        paddingHorizontal: 16,
+        backgroundColor: colors.morado,
+        borderRadius: 16,
+        marginBottom: 24,
+    },
+    confirmButtonText: {
+        color: colors.AzulOscuro,
+        fontSize: 16,
+        fontWeight: '700'
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f5f5f5',
+    },
+    cartScreenTitle: {
+        fontSize: 18,
+        color: '#333',
+        marginVertical: 20,
+      },
 })
