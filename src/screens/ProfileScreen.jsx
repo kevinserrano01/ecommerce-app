@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, Image, Button, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Image, Modal, Pressable, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useSelector, useDispatch } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
@@ -9,9 +9,11 @@ import { colors } from '../global/colors'
 import CameraIcon from '../components/CameraIcon';
 
 const ProfileScreen = () => {
+    const [modalVisible, setModalVisible] = useState(false);
     const user = useSelector(state=>state.authReducer.value.email);
     const image = useSelector(state=>state.authReducer.value.profileImage);
     const localId = useSelector(state=>state.authReducer.value.localId);
+    // const { image, user, localId } = useSelector(state => state.auth); Reducir codigo
     const dispatch = useDispatch()
     const [triggerPutProfileImage, result] = usePutProfileImageMutation();
     
@@ -19,7 +21,7 @@ const ProfileScreen = () => {
     const verifyCameraPermissions = async () => {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
-            alert('Sorry, we need camera permissions to make this work!');
+            alert('Se necesita permiso para acceder a la cámara');
             return false;
         }
         return true;
@@ -29,15 +31,16 @@ const ProfileScreen = () => {
         const hasPermission = await verifyCameraPermissions();
         if (!hasPermission) return;
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images, // All files
+            mediaTypes: ImagePicker.MediaTypeOptions.All, // All files
             allowsEditing: true, // Editar imagen
             aspect: [1, 1], // Aspect de la imagen
+            base64: true, // Guardar la imagen en base64
             quality: 1, // Calidad de la imagen
         });
 
         if (!result.cancelled) {
-            dispatch(setProfileImage(`data:image/jpg;base64,${result.assets[0].base64}`)); // Guardar la imagen en el store
-            triggerPutProfileImage({image: `data:image/jpg;base64,${result.assets[0].base64}`, localId}); // Enviar la imagen al servidor
+            dispatch(setProfileImage(`data:image/jpeg;base64,${result.assets[0].base64}`)); // Guardar la imagen en el store
+            triggerPutProfileImage({image: `data:image/jpeg;base64,${result.assets[0].base64}`, localId}); // Enviar la imagen al servidor
         }
     };
 
@@ -48,7 +51,9 @@ const ProfileScreen = () => {
             {
                 image
                     ?
-                    <Image source={{ uri: image }} resizeMode='cover' style={styles.profileImage} />
+                    <Pressable onPress={() => setModalVisible(true)}>
+                            <Image source={{ uri: image }} resizeMode='cover' style={styles.profileImage} />
+                    </Pressable>
                     :
                     <Text style={styles.textProfilePlaceHolder}>{user.charAt(0).toUpperCase()}</Text>
             }
@@ -57,6 +62,23 @@ const ProfileScreen = () => {
             </Pressable>
         </View>
         <Text style={styles.profileData}>Email: {user}</Text>
+
+        <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.modalContainer}>
+                    <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(!modalVisible)}>
+                        <Text style={styles.closeButtonText}>X</Text>
+                    </TouchableOpacity>
+                    <Image source={{ uri: image }} style={styles.fullImage} />
+                </View>
+            </Modal>
+
     </View>
   )
 }
@@ -73,12 +95,12 @@ const styles = StyleSheet.create({
         width: 128,
         height: 128,
         borderRadius: 128,
-        backgroundColor: colors.Negro,
+        backgroundColor: colors.Naranja,
         justifyContent: 'center',
         alignItems: 'center'
     },
     textProfilePlaceHolder: {
-        color: colors.Blanco,
+        color: colors.Negro,
         fontSize: 48,
     },
     profileData: {
@@ -94,5 +116,27 @@ const styles = StyleSheet.create({
         width: 128,
         height: 128,
         borderRadius: 128
-    }
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    },
+    fullImage: {
+        width: '90%',
+        height: '70%',
+        resizeMode: 'contain',
+    },
+    closeButton: {
+        position: 'absolute',
+        top: 40,
+        right: 20,
+        zIndex: 1,
+    },
+    closeButtonText: {
+        fontSize: 30,
+        color: '#FFF',
+        fontWeight: 'bold'
+    },
 })
