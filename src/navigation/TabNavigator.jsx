@@ -5,6 +5,7 @@ import { StyleSheet } from "react-native";
 import ShopNavigator from "./ShopNavigator";
 import CartNavigator from "./CartNavigator";
 import ReceiptsNavigator from "./ReceiptsNavigator";
+import ProfileNavigator from "./ProfileNavigator";
 import { colors } from '../global/colors'
 
 const Tab = createBottomTabNavigator();
@@ -43,6 +44,15 @@ const TabNavigator = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Icon name="receipt-long" color={focused?colors.Naranja:colors.Gris} size={32} />
+                    )
+                }}
+            />
+            <Tab.Screen
+                name="Profile"
+                component={ProfileNavigator}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <Icon name="person" color={focused?colors.Naranja:colors.Gris} size={32} />
                     )
                 }}
             />

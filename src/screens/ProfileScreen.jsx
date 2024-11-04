@@ -5,14 +5,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import { setProfileImage } from '../features/auth/authSlice';
 import { usePutProfileImageMutation } from '../services/userService';
+import { colors } from '../global/colors'
+import CameraIcon from '../components/CameraIcon';
 
 const ProfileScreen = () => {
-    // const [image, setImage] = useState("")
-    // const [user, setUser] = useState("Kevin")
     const user = useSelector(state=>state.authReducer.value.email);
     const image = useSelector(state=>state.authReducer.value.profileImage);
     const localId = useSelector(state=>state.authReducer.value.localId);
-    
     const dispatch = useDispatch()
     const [triggerPutProfileImage, result] = usePutProfileImageMutation();
     
@@ -44,33 +43,20 @@ const ProfileScreen = () => {
 
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.imageContainer}>
+    <View style={styles.profileContainer}>
+        <View style={styles.imageProfileContainer}>
             {
-                image ? (
-                    <Image
-                        style={styles.profileImage}
-                        source={{ uri: image }}
-                        resizeMode='cover'
-                    />
-                ) : (
-                    <Text style={styles.textProfileImage}>{user.charAt(0).toUpperCase()}</Text>
-                )
+                image
+                    ?
+                    <Image source={{ uri: image }} resizeMode='cover' style={styles.profileImage} />
+                    :
+                    <Text style={styles.textProfilePlaceHolder}>{user.charAt(0).toUpperCase()}</Text>
             }
-          <Pressable style={styles.editButton} onPress={pickImage}>
-            <Icon name="edit" size={20} color="#fff" />
-          </Pressable>
+            <Pressable onPress={pickImage} style={({ pressed }) => [{ opacity: pressed ? 0.90 : 1 }, styles.cameraIcon]} >
+                <CameraIcon />
+            </Pressable>
         </View>
-        <Text style={styles.name}>John Doe</Text>
-        <Text style={styles.email}>john.doe@example.com</Text>
-      </View>
-      <View style={styles.body}>
-        <Text style={styles.bio}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.
-        </Text>
-        <Button title="Edit Profile" onPress={() => {}} />
-      </View>
+        <Text style={styles.profileData}>Email: {user}</Text>
     </View>
   )
 }
@@ -78,61 +64,35 @@ const ProfileScreen = () => {
 export default ProfileScreen
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#f8f8f8',
-        alignItems: 'center',
-        padding: 20,
+    profileContainer: {
+        padding: 32,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    header: {
-        alignItems: 'center',
-        marginBottom: 20,
+    imageProfileContainer: {
+        width: 128,
+        height: 128,
+        borderRadius: 128,
+        backgroundColor: colors.Negro,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    imageContainer: {
-        position: 'relative',
+    textProfilePlaceHolder: {
+        color: colors.Blanco,
+        fontSize: 48,
+    },
+    profileData: {
+        paddingVertical: 16,
+        fontSize: 16
+    },
+    cameraIcon: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
     },
     profileImage: {
-        width: 150,
-        height: 150,
-        borderRadius: 75,
-        marginBottom: 10,
-    },
-    textProfileImage: {
-        width: 150,
-        height: 150,
-        borderRadius: 75,
-        marginBottom: 10,
-        backgroundColor: '#007bff',
-        color: '#fff',
-        fontSize: 60,
-        textAlign: 'center',
-        textAlignVertical: 'center',
-    },
-    editButton: {
-        position: 'absolute',
-        bottom: 10,
-        right: 10,
-        backgroundColor: '#007bff',
-        borderRadius: 20,
-        padding: 5,
-      },
-    name: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    email: {
-        fontSize: 16,
-        color: '#666',
-    },
-    body: {
-        width: '100%',
-        alignItems: 'center',
-    },
-    bio: {
-        fontSize: 16,
-        color: '#666',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
+        width: 128,
+        height: 128,
+        borderRadius: 128
+    }
 })

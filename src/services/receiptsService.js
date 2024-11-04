@@ -13,6 +13,11 @@ export const receiptApi = createApi({
         body: { receipt },
       }),
     }),
+    getReceipts: builder.query({
+      query: () => `receipts.json`,
+      transformResponse: (response) =>
+        response ? Object.values(response) : [],
+    }),
   }),
 });
 
