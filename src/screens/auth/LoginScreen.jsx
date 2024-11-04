@@ -1,30 +1,29 @@
 import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState, useEffect } from 'react';
-import { setUser } from '../features/auth/authSlice';
+import { setUser } from '../../features/auth/authSlice';
 import { useDispatch } from 'react-redux';
-import { useLoginMutation } from '../services/authService';
+import { useLoginMutation } from '../../services/authService';
 
 const LoginScreen = ({navigation}) => {
-
-  const [email, setEmail] = useState("")
+    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
     const dispatch = useDispatch()
-
     const [triggerLogin, result] = useLoginMutation()
 
     useEffect(()=>{
         if(result.status==="rejected"){
-            console.log("Error al iniciar sesión", result)
-        }else if(result.status==="fulfilled"){
+            console.log("Error al iniciar sesión", result.error)
+            const errorMessage = result.error.data?.error?.message || "Error desconocido";
+            alert("Error al iniciar sesión: " + errorMessage);
+        } else if (result.status==="fulfilled"){
             console.log("Usuario logueado con éxito")
             dispatch(setUser(result.data))
         }
     },[result])
 
     const onsubmit = ()=>{
-        //console.log(email,password)       
+        console.log(email,password)
         triggerLogin({email,password})
     }
 
@@ -39,13 +38,13 @@ const LoginScreen = ({navigation}) => {
             <View style={styles.inputContainer}>
                 <TextInput
                     onChangeText={(text) => setEmail(text)}
-                    placeholderTextColor="#EBEBEB"
+                    // placeholderTextColor="#EBEBEB"
                     placeholder="Email"
                     style={styles.textInput}
                 />
                 <TextInput
                     onChangeText={(text) => setPassword(text)}
-                    placeholderTextColor="#EBEBEB"
+                    // placeholderTextColor="#EBEBEB"
                     placeholder='Password'
                     style={styles.textInput}
                     secureTextEntry
@@ -53,7 +52,7 @@ const LoginScreen = ({navigation}) => {
 
             </View>
             <View style={styles.footTextContainer}>
-                <Text style={styles.whiteText}>¿No tienes una cuenta?</Text>
+                <Text style={styles.whiteText}>¿No tienes una cuenta? </Text>
                 <Pressable onPress={() => navigation.navigate('Register')}>
                     <Text style={
                         {

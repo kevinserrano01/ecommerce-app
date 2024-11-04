@@ -4,7 +4,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     value: {
-      email: "kevinserrano010@gmail.com",
+      email: "",
       token: null,
       profileImage: "",
       localId: "",

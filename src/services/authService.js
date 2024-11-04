@@ -5,13 +5,6 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({ baseUrl: base_auth_url }),
   endpoints: (builder) => ({
-    login: builder.mutation({
-      query: ({ ...auth }) => ({
-        url: `accounts:signInWithPassword?key=${API_KEY}`,
-        method: "POST",
-        body: auth,
-      }),
-    }),
     register: builder.mutation({
       query: ({ ...auth }) => ({
         url: `accounts:signUp?key=${API_KEY}`,
@@ -19,7 +12,18 @@ export const authApi = createApi({
         body: auth,
       }),
     }),
+    login: builder.mutation({
+      query: ({ email, password }) => ({
+        url: `accounts:signInWithPassword?key=${API_KEY}`,
+        method: "POST",
+        body: {
+          email,
+          password,
+          returnSecureToken: true, // Devuelve un token de seguridad
+        },
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = authApi;
+export const { useRegisterMutation, useLoginMutation } = authApi;

@@ -1,21 +1,20 @@
 import { StyleSheet, Text, TextInput, View, Pressable } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useEffect, useState } from 'react'
-import { useRegisterMutation } from '../services/authService'
+import { useRegisterMutation } from '../../services/authService'
 import { useDispatch } from 'react-redux'
-import { setUser } from '../features/auth/authSlice'
+import { setUser } from '../../features/auth/authSlice'
 
 const RegisterScreen = ({navigation}) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
-
     const [triggerSignup, result] = useRegisterMutation()
     const dispatch = useDispatch()
 
     useEffect(() => {
         if (result.status === "rejected") {
-            console.log("Error al agregar usuario")
+            console.log("Error al agregar usuario", result)
         } else if (result.status === "fulfilled") {
             console.log("Usuario agregado correctamente")
             dispatch(setUser(result.data))
@@ -26,7 +25,7 @@ const RegisterScreen = ({navigation}) => {
         console.log(email, password)
 
         if (password !== confirmPassword) {
-            alert("Passwords do not match")
+            alert("Las contraseñas no coinciden")
             return
         }
 
@@ -75,11 +74,13 @@ const RegisterScreen = ({navigation}) => {
                 </Pressable>
             </View>
 
-            <Pressable style={styles.btn} onPress={onsubmit}><Text style={styles.btnText}>Iniciar Sesion</Text></Pressable>
+            <Pressable style={styles.btn} onPress={onsubmit}><Text style={styles.btnText}>Crear cuenta</Text></Pressable>
 
             <View style={styles.guestOptionContainer}>
                 <Text style={styles.whiteText}>¿Solo quieres dar un vistazo?</Text>
-                <Pressable><Text style={{ ...styles.whiteText, ...styles.strongText }}>Ingresa como invitado</Text></Pressable>
+                <Pressable onPress={()=>dispatch(setUser({email:"demo@mundogeek.com",token:"demo"}))}>
+                    <Text style={{ ...styles.whiteText, ...styles.strongText }}>Ingresa como invitado</Text>
+                </Pressable>
             </View>
     </LinearGradient>
   )
