@@ -7,6 +7,7 @@ import CartNavigator from "./CartNavigator";
 import ReceiptsNavigator from "./ReceiptsNavigator";
 import ProfileNavigator from "./ProfileNavigator";
 import { colors } from '../global/colors'
+import MyPlacesNavigator from "./MyPlacesNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -44,6 +45,15 @@ const TabNavigator = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Icon name="receipt-long" color={focused?colors.Naranja:colors.Gris} size={32} />
+                    )
+                }}
+            />
+            <Tab.Screen
+                name="Places"
+                component={MyPlacesNavigator}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <Icon name="location-on" color={focused?colors.Naranja:colors.Gris} size={32} />
                     )
                 }}
             />
