@@ -1,10 +1,9 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { database } from "../firebase/database";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const receiptApi = createApi({
   reducerPath: "receiptsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: database }),
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.EXPO_PUBLIC_BASE_URL }),
   endpoints: (builder) => ({
     postReceipt: builder.mutation({
       query: ({ ...receipt }) => ({
