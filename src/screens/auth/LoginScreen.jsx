@@ -4,26 +4,42 @@ import { useState, useEffect } from 'react';
 import { setUser } from '../../features/auth/authSlice';
 import { useDispatch } from 'react-redux';
 import { useLoginMutation } from '../../services/authService';
+import { clearSessions, insertSession } from '../../database';
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import { colors } from '../../global/colors';
 
 const LoginScreen = ({navigation}) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [rememberMe, setRememberMe] = useState(false)
     const dispatch = useDispatch()
     const [triggerLogin, result] = useLoginMutation()
 
-    useEffect(()=>{
-        if(result.status==="rejected"){
-            console.log("Error al iniciar sesión", result.error)
-            const errorMessage = result.error.data?.error?.message || "Error desconocido";
-            alert("Error al iniciar sesión: " + errorMessage);
-        } else if (result.status==="fulfilled"){
-            console.log("Usuario logueado con éxito")
-            dispatch(setUser(result.data))
+    useEffect(() => {
+        //result?.isSuccess
+        //console.log("Remember me: ", rememberMe)
+        if (result.isSuccess) {
+          console.log("Usuario logueado con éxito")
+          console.log(result.data)
+          dispatch(setUser(result.data))
+          
+          if (rememberMe) {
+            clearSessions().then(() => console.log("sesiones eliminadas")).catch(error => console.log("Error al eliminar las sesiones: ", error))
+            console.log("result data:", result.data)
+            insertSession({
+              localId: result.data.localId,
+              email: result.data.email,
+              token: result.data.idToken
+            })
+              .then(res => console.log("Usuario insertado con éxito",res))
+              .catch(error => console.log("Error al insertar usuario",error))
+          }
+    
         }
-    },[result])
+      }, [result,rememberMe])
 
     const onsubmit = ()=>{
-        console.log(email,password)
+        // console.log(email,password)
         triggerLogin({email,password})
     }
 
@@ -49,7 +65,16 @@ const LoginScreen = ({navigation}) => {
                     style={styles.textInput}
                     secureTextEntry
                 />
-
+            </View>
+            <View style={styles.rememberMeContainer}>
+                <Text style={styles.whiteText}>Mantener sesión iniciada</Text>
+                {
+                    rememberMe
+                    ?
+                    <Pressable onPress={() => setRememberMe(!rememberMe)}><Icon name="toggle-on" size={48} color={colors.Verde} /></Pressable>
+                    :
+                    <Pressable onPress={() => setRememberMe(!rememberMe)}><Icon name="toggle-off" size={48} color={colors.Gris} /></Pressable>
+                }
             </View>
             <View style={styles.footTextContainer}>
                 <Text style={styles.whiteText}>¿No tienes una cuenta? </Text>
@@ -133,5 +158,11 @@ const styles = StyleSheet.create({
     strongText: {
         fontWeight: 'bold',
         marginLeft: 5
+    },
+    rememberMeContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginBottom: 20
     }
 })

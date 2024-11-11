@@ -1,12 +1,28 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
 import { colors } from '../global/colors'
+import { useSelector, useDispatch } from 'react-redux'
+import  Icon  from 'react-native-vector-icons/MaterialIcons'
+import { clearUser } from '../features/auth/authSlice'
+import { clearSessions } from '../database'
 
 const Header = ({subtitle}) => {
+  const user = useSelector(state=>state.authReducer.value.email)
+  const dispatch = useDispatch()
+
+  const onLogout = ()=>{
+    dispatch(clearUser())
+    clearSessions()
+      .then(()=>console.log("Sesión eliminada"))
+      .catch((error)=>console.log("Error al eliminar la sesión"))
+  }
+
   return (
     <View style={styles.headerContainer}>
-      <Text style={styles.title}>Black</Text>
-      <Text style={styles.title}>{subtitle}</Text>
-      {/* <Search /> */}
+      <Text style={styles.title}>Ecommerce</Text>
+      {/* <Text style={styles.title}>{subtitle}</Text> */}
+      {
+        user &&  <Pressable onPress={onLogout} style={styles.access}><Icon name="logout" size={20} color="#fff" /></Pressable>
+      }
     </View>
   )
 }
@@ -28,5 +44,9 @@ const styles = StyleSheet.create({
         color: colors.Negro,
         fontWeight: 'bold',
         fontSize: 21
+    },
+    access: {
+      alignSelf: 'flex-end',
+      paddingRight: 16
     }
 })
